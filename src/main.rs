@@ -1,4 +1,7 @@
-use std::io::{stdin, Read};
+use std::{
+    collections::HashMap,
+    io::{stdin, Read},
+};
 
 fn main() {
     let mut input = String::new();
@@ -18,5 +21,18 @@ fn main() {
     let sum = (0..left.len())
         .into_iter()
         .fold(0, |acc, i| acc + (left[i].abs_diff(right[i])));
-    println!("sum: {sum}")
+
+    println!("part 1: {sum}");
+
+    let mut freq = HashMap::new();
+
+    right.iter().for_each(|i| {
+        freq.entry(i)
+            .and_modify(|counter| *counter += 1)
+            .or_insert(1);
+    });
+
+    let sum: usize = left.iter().map(|i| i * freq.get(i).unwrap_or(&0)).sum();
+
+    println!("part 2: {sum}");
 }
