@@ -27,7 +27,7 @@ fn main() {
     let xmas = Regex::new(r"XMAS").unwrap();
     let samx = Regex::new(r"SAMX").unwrap();
 
-    let sum1: usize = vec![horizontal, vertical, diagonal_cols, diagonal_rows]
+    let sum1: usize = vec![&horizontal, &vertical, &diagonal_cols, &diagonal_rows]
         .iter()
         .flat_map(|lines| {
             lines
@@ -37,7 +37,16 @@ fn main() {
         .sum();
 
     // Part two, use only diagonal, get coordinates of matched A in MAS or SAM anf check all matched coordinates in the other diagonal
-    println!("sum1: {sum1}");
+    let mas = Regex::new(r"M(A)S").unwrap();
+    let sum2: Vec<_> = vec![&diagonal_cols, &diagonal_rows]
+        .iter()
+        .flat_map(|lines| {
+            lines
+                .iter()
+                .map(|line| mas.captures_iter(&line).map(|c| c.extract::<usize>().0))
+        })
+        .collect();
+    println!("sum1: {sum2:?}");
 }
 
 fn diagonal_strings<'a, I>(lines: I) -> Vec<String>
